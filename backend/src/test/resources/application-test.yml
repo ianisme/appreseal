@@ -1,0 +1,43 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:appreseal_test;MODE=MySQL;DATABASE_TO_LOWER=TRUE;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    open-in-view: false
+
+appreseal:
+  # 测试里不跑后台流水线，任务状态由测试自己驱动
+  executor:
+    enabled: false
+    mode: mock
+    output-dir: ./target/test-artifacts
+    work-dir: ./target/test-work
+    upload-dir: ./target/test-uploads
+  storage:
+    # 定时清理在测试里关闭；测试直接调用 runNow()
+    enabled: false
+    data-dir: ./target
+  itunes:
+    enabled: false
+  seed:
+    enabled: true
+  auth:
+    # 邮箱失败 3 次即锁；IP / 注册上限放宽，避免整套测试共用 127.0.0.1 时互相锁死
+    login-email-max-failures: 3
+    login-ip-max-failures: 1000
+    register-max-per-ip: 1000
+    reset-max-per-email: 5
+    reset-max-per-ip: 1000
+    reset-max-attempts: 3
+  mail:
+    enabled: true
+    capture: true
+
+logging:
+  level:
+    root: WARN
+    com.appreseal: INFO

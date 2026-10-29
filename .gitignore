@@ -1,0 +1,44 @@
+# dependencies
+node_modules/
+.pnpm-store/
+
+# build output
+dist/
+dist-ssr/
+*.local
+
+# logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# editor / os
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+
+# env
+.env
+.env.*
+!.env.example
+
+# backend
+target/
+*.class
+backend/data/
+backend/docker/ipatool
+*.mv.db
+*.trace.db
+
+# 真实账号、凭证和安装包不要进仓库
+*.ipa
+credential.bin
+*.session
+*.cookies
+.ipatool-passphrase
+.ipatool/

@@ -1,0 +1,25 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:mysql://${MYSQL_HOST:127.0.0.1}:${MYSQL_PORT:3306}/${MYSQL_DATABASE:appreseal}?useUnicode=true&characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: ${MYSQL_USER:appreseal}
+    password: ${MYSQL_PASSWORD:appreseal}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+  h2:
+    console:
+      enabled: false
+
+appreseal:
+  seed:
+    # 首次部署可打开以写入演示数据，之后改为 false
+    enabled: ${APPRESEAL_SEED:true}
+  executor:
+    mode: ${APPRESEAL_EXECUTOR_MODE:mock}

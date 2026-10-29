@@ -1,0 +1,6 @@
+target
+data
+*.ipa
+credential.bin
+*.session
+.ipatool-passphrase

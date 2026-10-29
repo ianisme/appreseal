@@ -1,0 +1,89 @@
+services:
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: appreseal
+      MYSQL_USER: appreseal
+      MYSQL_PASSWORD: appreseal
+      MYSQL_ROOT_PASSWORD: root
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-proot", "--silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 20s
+
+  backend:
+    build: ./backend
+    environment:
+      SPRING_PROFILES_ACTIVE: mysql
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_DATABASE: appreseal
+      MYSQL_USER: appreseal
+      MYSQL_PASSWORD: appreseal
+      APPRESEAL_JWT_SECRET: appreseal-docker-dev-secret-change-me-32b
+      APPRESEAL_SEED: "true"
+      # 真实执行器：镜像内自带 appget.sh + FairPlay 解密引擎 + Linux ipatool
+      APPRESEAL_EXECUTOR_MODE: shell
+      APPRESEAL_APPGET_PATH: /opt/fairplay/fairplay-tools/appget.sh
+      APPRESEAL_OUTPUT_DIR: /app/data/artifacts
+      APPRESEAL_WORK_DIR: /app/data/work
+      # 上传 IPA：落盘目录 + 镜像内解密引擎
+      APPRESEAL_UPLOAD_DIR: /app/data/uploads
+      APPRESEAL_MAX_UPLOAD_SIZE: 2GB
+      APPRESEAL_MAX_UPLOAD_BYTES: "2147483648"
+      APPRESEAL_EXECUTOR_TIMEOUT_MINUTES: "45"
+      APPRESEAL_CORS_ALLOWED_ORIGINS: http://localhost:8088,http://127.0.0.1:8088,http://localhost:5173,http://127.0.0.1:5173
+      # 下载签名链接有效期 + 定时清理（保留期在管理后台调整）
+      APPRESEAL_DOWNLOAD_LINK_TTL_MINUTES: "15"
+      APPRESEAL_DATA_DIR: /app/data
+      APPRESEAL_CLEANUP_ENABLED: "true"
+      APPRESEAL_CLEANUP_INTERVAL_MS: "3600000"
+      # nginx 在私网后面，限流可以读它写入的 X-Real-IP
+      APPRESEAL_TRUST_PROXY: "true"
+      # 找回密码：配好 SMTP 后把 ENABLED 设为 true。未配置时接口会明确返回暂不可用。
+      APPRESEAL_MAIL_ENABLED: ${APPRESEAL_MAIL_ENABLED:-false}
+      APPRESEAL_MAIL_HOST: ${APPRESEAL_MAIL_HOST:-}
+      APPRESEAL_MAIL_PORT: ${APPRESEAL_MAIL_PORT:-587}
+      APPRESEAL_MAIL_USERNAME: ${APPRESEAL_MAIL_USERNAME:-}
+      APPRESEAL_MAIL_PASSWORD: ${APPRESEAL_MAIL_PASSWORD:-}
+      APPRESEAL_MAIL_FROM: ${APPRESEAL_MAIL_FROM:-}
+      APPRESEAL_MAIL_STARTTLS: ${APPRESEAL_MAIL_STARTTLS:-true}
+      APPRESEAL_MAIL_SSL: ${APPRESEAL_MAIL_SSL:-false}
+      APPRESEAL_IPATOOL_PATH: /opt/ipatool/ipatool
+      APPRESEAL_IPATOOL_HOME: /app/data/ipatool
+      # 可选代理：本机调试可设 http://host.docker.internal:7897；留空直连
+      APPRESEAL_ITUNES_PROXY: ${APPRESEAL_ITUNES_PROXY:-}
+      APPRESEAL_EXECUTOR_PROXY: ${APPRESEAL_EXECUTOR_PROXY:-}
+    volumes:
+      - artifacts:/app/data
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "8080:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c 'echo > /dev/tcp/127.0.0.1/8080'"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 40s
+    restart: on-failure
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8088:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+
+volumes:
+  mysql-data:
+  artifacts:

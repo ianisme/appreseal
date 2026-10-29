@@ -1,0 +1,55 @@
+:root {
+  /* ---- color ---- */
+  --bg: #ffffff;
+  --bg-subtle: #f5f5f7;
+  --bg-muted: #fafafa;
+  --surface: #ffffff;
+  --text: #1d1d1f;
+  --text-2: #6e6e73;
+  --text-3: #86868b;
+  --line: #d2d2d7;
+  --line-soft: #e8e8ed;
+  --blue: #0071e3;
+  --blue-hover: #0077ed;
+  --blue-press: #0062c4;
+  --blue-soft: #e8f2fd;
+  --green: #248a3d;
+  --green-soft: #e7f6ec;
+  --orange: #b25e09;
+  --orange-soft: #fdf1e3;
+  --red: #d70015;
+  --red-soft: #fdecee;
+  --purple: #5e5ce6;
+  --purple-soft: #eeedfd;
+  --dark: #1d1d1f;
+  --dark-2: #2d2d30;
+
+  /* ---- radius ---- */
+  --r-xs: 8px;
+  --r-sm: 10px;
+  --r-md: 14px;
+  --r-lg: 20px;
+  --r-xl: 28px;
+  --r-pill: 980px;
+
+  /* ---- shadow ---- */
+  --sh-xs: 0 1px 1px rgba(0, 0, 0, 0.03);
+  --sh-sm: 0 1px 2px rgba(0, 0, 0, 0.04), 0 4px 14px rgba(0, 0, 0, 0.04);
+  --sh-md: 0 10px 30px rgba(0, 0, 0, 0.08);
+  --sh-lg: 0 24px 70px rgba(0, 0, 0, 0.16);
+
+  /* ---- motion ---- */
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --t-fast: 0.15s;
+  --t: 0.22s;
+
+  /* ---- layout ---- */
+  --container: 1180px;
+  --header-h: 60px;
+  --aside-w: 236px;
+
+  /* ---- fonts ---- */
+  --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro SC", "PingFang SC",
+    "Helvetica Neue", "Microsoft YaHei", Arial, sans-serif;
+  --mono: "SF Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+}

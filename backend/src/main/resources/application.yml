@@ -1,0 +1,125 @@
+server:
+  port: 8080
+  shutdown: graceful
+
+spring:
+  application:
+    name: appreseal-server
+  datasource:
+    url: jdbc:h2:file:./data/appreseal;MODE=MySQL;DATABASE_TO_LOWER=TRUE;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+        format_sql: false
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    default-property-inclusion: non_null
+  mvc:
+    problemdetails:
+      enabled: false
+  servlet:
+    multipart:
+      max-file-size: ${APPRESEAL_MAX_UPLOAD_SIZE:2GB}
+      max-request-size: ${APPRESEAL_MAX_UPLOAD_SIZE:2GB}
+      # 大文件直接落到数据卷，避免先写满容器 /tmp
+      file-size-threshold: 0
+      location: ${APPRESEAL_UPLOAD_DIR:./data/uploads}/staging
+
+appreseal:
+  jwt:
+    # 生产必须通过环境变量覆盖：至少 32 字节
+    secret: ${APPRESEAL_JWT_SECRET:appreseal-dev-only-secret-please-change-me-0123456789}
+    ttl-hours: 168
+  cors:
+    allowed-origins: http://localhost:5173,http://127.0.0.1:5173,http://localhost:5183,http://127.0.0.1:5183
+  seed:
+    enabled: true
+  executor:
+    # mock: 模拟流水线；shell: 调用镜像内的 appget.sh（Docker 默认）
+    mode: ${APPRESEAL_EXECUTOR_MODE:mock}
+    appget-path: ${APPRESEAL_APPGET_PATH:/opt/fairplay/fairplay-tools/appget.sh}
+    output-dir: ${APPRESEAL_OUTPUT_DIR:./data/artifacts}
+    work-dir: ${APPRESEAL_WORK_DIR:./data/work}
+    # 上传 IPA 的落盘目录与镜像内解密引擎
+    upload-dir: ${APPRESEAL_UPLOAD_DIR:./data/uploads}
+    decrypt-python: ${APPRESEAL_DECRYPT_PYTHON:/opt/fairplay/fairplay-decrypt/.venv/bin/python}
+    decrypt-script: ${APPRESEAL_DECRYPT_SCRIPT:/opt/fairplay/fairplay-decrypt/decrypt.py}
+    max-upload-bytes: ${APPRESEAL_MAX_UPLOAD_BYTES:2147483648}
+    # 例如 http://host.docker.internal:7897；留空表示直连
+    proxy: ${APPRESEAL_EXECUTOR_PROXY:}
+    # shell 模式下同一时间只允许一个 appget 进程（Apple ID 切换必须串行）
+    shell-serialized: true
+    timeout-minutes: ${APPRESEAL_EXECUTOR_TIMEOUT_MINUTES:45}
+    poll-interval-ms: 1000
+  itunes:
+    enabled: ${APPRESEAL_ITUNES_ENABLED:true}
+    proxy: ${APPRESEAL_ITUNES_PROXY:}
+    timeout-seconds: 8
+  ipatool:
+    # Linux 容器内的 ipatool；留空则后台登录接口会明确拒绝
+    path: ${APPRESEAL_IPATOOL_PATH:}
+    home: ${APPRESEAL_IPATOOL_HOME:./data/ipatool}
+  download:
+    # 短时签名下载链接的有效期
+    link-ttl-minutes: ${APPRESEAL_DOWNLOAD_LINK_TTL_MINUTES:15}
+  auth:
+    # 只信任来自私网（nginx）的 X-Real-IP；公网直连后端不认这个头
+    trust-proxy: ${APPRESEAL_TRUST_PROXY:false}
+    login-email-max-failures: ${APPRESEAL_LOGIN_EMAIL_MAX_FAILURES:8}
+    login-ip-max-failures: ${APPRESEAL_LOGIN_IP_MAX_FAILURES:40}
+    login-window-seconds: ${APPRESEAL_LOGIN_WINDOW_SECONDS:900}
+    login-lock-seconds: ${APPRESEAL_LOGIN_LOCK_SECONDS:900}
+    register-max-per-ip: ${APPRESEAL_REGISTER_MAX_PER_IP:8}
+    register-window-seconds: ${APPRESEAL_REGISTER_WINDOW_SECONDS:3600}
+    reset-max-per-email: ${APPRESEAL_RESET_MAX_PER_EMAIL:5}
+    reset-max-per-ip: ${APPRESEAL_RESET_MAX_PER_IP:20}
+    reset-window-seconds: ${APPRESEAL_RESET_WINDOW_SECONDS:3600}
+    reset-code-ttl-seconds: ${APPRESEAL_RESET_CODE_TTL_SECONDS:600}
+    reset-max-attempts: ${APPRESEAL_RESET_MAX_ATTEMPTS:5}
+  mail:
+    enabled: ${APPRESEAL_MAIL_ENABLED:false}
+    # 测试专用：验证码留在内存，不出现在接口响应里
+    capture: ${APPRESEAL_MAIL_CAPTURE:false}
+    host: ${APPRESEAL_MAIL_HOST:}
+    port: ${APPRESEAL_MAIL_PORT:587}
+    username: ${APPRESEAL_MAIL_USERNAME:}
+    password: ${APPRESEAL_MAIL_PASSWORD:}
+    from: ${APPRESEAL_MAIL_FROM:}
+    starttls: ${APPRESEAL_MAIL_STARTTLS:true}
+    ssl: ${APPRESEAL_MAIL_SSL:false}
+  storage:
+    # 定时清理：产物、上传包、工作区、任务日志
+    enabled: ${APPRESEAL_CLEANUP_ENABLED:true}
+    # 数据卷根目录（用于容量告警）；留空时取产物目录的上级
+    data-dir: ${APPRESEAL_DATA_DIR:}
+    cleanup-interval-ms: ${APPRESEAL_CLEANUP_INTERVAL_MS:3600000}
+    cleanup-initial-delay-ms: ${APPRESEAL_CLEANUP_INITIAL_DELAY_MS:300000}
+  mock:
+    # 模拟流水线各阶段耗时（毫秒）
+    download-ms: 2500
+    decrypt-ms: 4000
+    verify-ms: 2000
+
+logging:
+  level:
+    com.appreseal: INFO
+    org.hibernate.SQL: WARN
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

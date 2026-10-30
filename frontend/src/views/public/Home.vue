@@ -20,16 +20,16 @@ onMounted(async () => {
 })
 
 const stats = [
-  { value: '团队', label: '自己或同事一起用' },
-  { value: '不收费', label: '提交和下载都不扣费' },
-  { value: '排队', label: '进度在页面上看得见' },
-  { value: '再下', label: '做好的包可以反复拿' }
+  { value: '自动下载', label: '从 App Store 拉取加密包' },
+  { value: '自动脱壳', label: '服务端解开后再交付' },
+  { value: '不收费', label: '给自己或团队使用' },
+  { value: '再下', label: '明文包可以反复拿' }
 ]
 
 const steps = [
-  { n: '01', icon: 'zap', title: '登录就能用', desc: '给自己或团队开账号。不需要准备设备和付费余额。' },
-  { n: '02', icon: 'clock', title: '提交任务', desc: '从 App Store 选应用，或上传自己的加密 IPA。忙的时候会排队。' },
-  { n: '03', icon: 'download', title: '完成后下载', desc: '自己的任务和团队成品库都可以再下，没有购买和免费期。' }
+  { n: '01', icon: 'zap', title: '选一个苹果应用', desc: '从 App Store 搜索，或上传自己已经下载的加密 IPA。' },
+  { n: '02', icon: 'clock', title: '自动下载并脱壳', desc: '服务端自动下载加密包，再自动脱壳。进度在页面上看得清。' },
+  { n: '03', icon: 'download', title: '下载明文包', desc: '完成后直接下载。自己的任务和成品库都可以再拿。' }
 ]
 
 const faqs = [
@@ -64,11 +64,10 @@ const openFaq = ref(0)
     <section class="hero">
       <div class="container hero__grid">
         <div class="hero__copy">
-          <div class="eyebrow">给自己和团队用</div>
-          <h1 class="h1 hero__title">选一个应用，<br />等它完成，<br />再下载。</h1>
+          <div class="eyebrow">苹果应用脱壳</div>
+          <h1 class="h1 hero__title">选一个应用，<br />自动下载，<br />自动脱壳。</h1>
           <p class="lead hero__lead">
-            这是自用的整理工具，不是商店。登录后提交任务，进度在页面上看得清。
-            没有价格，也没有充值。
+            给自己和团队用的苹果应用脱壳工具。从 App Store 选好应用后，服务端会自动下载加密包并完成脱壳，做好后直接下载明文包。
           </p>
           <div class="hero__actions">
             <UiButton to="/app/new" variant="primary" size="lg">新建任务</UiButton>
@@ -78,9 +77,9 @@ const openFaq = ref(0)
             </UiButton>
           </div>
           <div class="hero__trust">
-            <span><AppIcon name="download" :size="14" /> 做好了还能再下</span>
-            <span><AppIcon name="lock" :size="14" /> 文件不长期留存</span>
-            <span><AppIcon name="zap" :size="14" /> 平均 3 分钟</span>
+            <span><AppIcon name="download" :size="14" /> 自动下载</span>
+            <span><AppIcon name="zap" :size="14" /> 自动脱壳</span>
+            <span><AppIcon name="lock" :size="14" /> 仅供学习研究</span>
           </div>
         </div>
 
@@ -128,8 +127,8 @@ const openFaq = ref(0)
         <div class="section-head">
           <div>
             <div class="eyebrow">WHY APPRESEAL</div>
-            <h2 class="h2" style="margin-top: 10px">给团队留一个入口。</h2>
-            <p>选应用、等完成、下载。不经过钱包。</p>
+            <h2 class="h2" style="margin-top: 10px">下载和脱壳都自动完成。</h2>
+            <p>选好苹果应用，剩下的不用自己操作。</p>
           </div>
           <router-link to="/docs" class="row gap-6 small">
             使用文档 <AppIcon name="arrow-right" :size="14" />

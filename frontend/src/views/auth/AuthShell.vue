@@ -11,8 +11,8 @@ defineProps<{ title: string; subtitle: string }>()
       <AppLogo dark />
       <div class="auth__pitch">
         <div class="eyebrow" style="color: #4da3ff">IOS IPA DECRYPTION</div>
-        <h1>把加密包<br />变成明文。</h1>
-        <p>多 Apple ID 池、离线 FairPlay 解密、cryptid 自动校验。</p>
+        <h1>苹果应用<br />自动脱壳。</h1>
+        <p>选好应用后自动下载、自动脱壳，做好后下载明文包。</p>
       </div>
 
       <div class="mini-term">

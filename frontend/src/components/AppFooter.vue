@@ -15,7 +15,7 @@ const groups = [
       <div class="footer__grid">
         <div class="footer__brand">
           <AppLogo />
-          <p>给自己和团队用的整理工具。<br />仅供学习研究，没有付费功能。</p>
+          <p>苹果应用脱壳工具。<br />自动下载，自动脱壳。仅供学习研究。</p>
         </div>
         <div v-for="g in groups" :key="g.title" class="footer__group">
           <div class="footer__title">{{ g.title }}</div>

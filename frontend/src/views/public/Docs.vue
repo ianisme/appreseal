@@ -37,11 +37,11 @@ const errors = [
       <article class="doc">
         <div class="eyebrow">DOCUMENTATION</div>
         <h1 class="h1" style="margin-top: 12px; font-size: 40px">使用文档</h1>
-        <p class="lead" style="margin-top: 14px">给自己和团队用。登录后提交任务，完成后下载。没有钱包和价格。</p>
+        <p class="lead" style="margin-top: 14px">苹果应用脱壳工具。选好应用后自动下载、自动脱壳，做好后下载明文包。</p>
 
         <section id="start" class="doc__section">
           <h2>快速开始</h2>
-          <p>整个流程分三步：选目标、等解密、拿产物。</p>
+          <p>整个流程分三步：选苹果应用、自动下载并脱壳、下载明文包。</p>
 
           <div class="steps">
             <div class="step">

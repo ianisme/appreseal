@@ -2,9 +2,9 @@
 
 [中文](README.md) | English | [日本語](README.ja.md)
 
-A tool for you or a small team. Pick an App Store app, or upload your own encrypted IPA, then download the result when the job finishes.
+A tool for decrypting Apple apps, for you or a small team. Pick an App Store app and the server downloads the encrypted package and decrypts it automatically. Download the plain package when the job finishes. You can also upload an encrypted IPA you already have.
 
-The user does not need a jailbroken device. Download, decrypt, and verification run on the server. There is no wallet, price, or top-up.
+The user does not need a jailbroken device. There is no wallet, price, or top-up.
 
 Screenshots and the full guide are in [README.md](README.md) (Chinese) and [README.ja.md](README.ja.md) (Japanese). The interface itself is still Chinese.
 
